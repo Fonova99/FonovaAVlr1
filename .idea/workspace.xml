@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cab84d95-a3b6-41e0-bbfe-f8428a88b848" name="Changes" comment="реализация методов двусвязного списка" />
+    <list default="true" id="cab84d95-a3b6-41e0-bbfe-f8428a88b848" name="Changes" comment="." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,7 +48,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1695819251045</updated>
-      <workItem from="1695819253765" duration="1054000" />
+      <workItem from="1695819253765" duration="1590000" />
     </task>
     <task id="LOCAL-00001" summary="запуск методов двусвязного списка">
       <created>1695822148995</created>
@@ -64,7 +64,14 @@
       <option name="project" value="LOCAL" />
       <updated>1695822181922</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary=".">
+      <created>1695822724476</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1695822724476</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -84,6 +91,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="запуск методов двусвязного списка" />
     <MESSAGE value="реализация методов двусвязного списка" />
-    <option name="LAST_COMMIT_MESSAGE" value="реализация методов двусвязного списка" />
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
   </component>
 </project>
