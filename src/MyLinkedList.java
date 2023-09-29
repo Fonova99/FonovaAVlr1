@@ -1,3 +1,6 @@
+import java.util.Random;
+import java.util.Scanner;
+
 public class MyLinkedList {
     private Node head;
     private Node tail;
@@ -12,9 +15,8 @@ public class MyLinkedList {
     }
     public void add(int data) {
         Node newNode = new Node(data);
+
         if (head == null) {
-            newNode.next = null;
-            newNode.previous = null;
             head = newNode;
             tail = newNode;
         } else {
@@ -36,6 +38,7 @@ public class MyLinkedList {
             tail = newNode;
         }
         size++;
+        print();
     }
     public void addFirst(int data) {
         Node newNode = new Node(data);
@@ -49,6 +52,7 @@ public class MyLinkedList {
             head = newNode; // Новый узел становится новой головой списка
         }
         size++;
+        print();
     }
     public void removeLast() {
         if (head == null) {
@@ -63,6 +67,7 @@ public class MyLinkedList {
         tail = tail.previous;
         tail.next = null;
         size--;
+        print();
     }
     public void removeFirst() {
         if (head == null) {
@@ -77,8 +82,9 @@ public class MyLinkedList {
         head = head.next;
         head.previous = null;
         size--;
+        print();
     }
-    public void addForIndex(int index, int data) {
+    public void addByIndex(int index, int data) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
@@ -101,18 +107,24 @@ public class MyLinkedList {
         newNode.previous = oldPrevious;
         newNode.next = oldNode;
         size++;
+        print();
     }
-    public int get(int index) {
+    public int getByIndex(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
         Node current = head;
-        for (int i = 0; i < index; i++) {
+        int counter = 0;
+
+        while (current != null && counter != index) {
             current = current.next;
+            counter++;
         }
+        System.out.println(current.data);
         return current.data;
+
     }
-    public void removeAt(int index) {
+    public void removeByIndex(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
@@ -135,33 +147,41 @@ public class MyLinkedList {
             current.next.previous = current.previous;
         }
         size--;
+        print();
     }
     public int size() {
+        System.out.println(size);
         return size;
     }
     public void clear() {
         head = null;
         tail = null;
         size = 0;
+        System.out.println("The list is empty");
     }
-    public void replaceElement(int index, int value) {
+    public void replaceElementByIndex(int index, int value) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
         Node current = head;
-
-        for (int i = 0; i < size; i++) {
-            if (i == index) {
+        int count = 0;
+        while (current != null) {
+            if (count != index) {
+                current = current.next;
+                count++;
+            } else {
                 current.data = value;
                 break;
             }
-            current = current.next;
         }
+        print();
     }
     public boolean isEmpty() {
         if (size != 0) {
+            System.out.println("The list is not empty");
             return false;
         } else {
+            System.out.println("The list is empty");
             return true;
         }
     }
@@ -182,54 +202,173 @@ public class MyLinkedList {
         temp = head;
         head = tail;
         tail = temp;
+        print();
+    }
+    public void insertListByIndex(int index, MyLinkedList list) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+        if (list.head == null) {
+            return; // если вставляемый список пустой, нет действий
+        }
+        Node listHead = list.head;
+        Node listTail = list.tail;
+
+        if (index == 0) {
+            addAllFirst(list);
+        } else if (index == size) {
+            addAllLast(list);
+        } else { // Вставка в середину списка. Найдем узел, после которого будем вставлять другой список
+            Node currentNode = head;
+            int count = 0;
+            while (currentNode != null) {
+                if (count != index) {
+                    currentNode = currentNode.next;
+                    count++;
+                } else {
+                    Node nextNode = currentNode.next;
+
+                    currentNode.next = listHead;
+                    listHead.previous = currentNode;
+
+                    listTail.next = nextNode;
+                    nextNode.previous = listTail;
+
+                    break;
+                }
+            }
+        }
+        size += list.size;
+        print();
     }
     public void addAllLast(MyLinkedList list) {
-        if (list.head == null) {
-            return; // Если второй список пуст, ничего не делаем
+            if (list.head == null) {
+                return;
+            }
+            Node listHead = list.head;
+            if (head == null) {
+                head = listHead;
+                tail = list.tail;
+            } else {
+                listHead.previous = null;
+                list.tail.next = head;
+                head.previous = list.tail;
+                head = listHead;
+            }
+            print();
+            size += list.size;
         }
-        if (head == null) {
-            // Если текущий список пуст, просто копируем второй список
-            head = list.head;
-            tail = list.tail;
-        } else {
-            // Устанавливаем следующий элемент последнего узла текущего списка на голову второго списка
-            tail.next = list.head;
-            list.head.previous = tail;
-            tail = list.tail;
-        }
-        size += list.size();
-    }
     public void addAllFirst(MyLinkedList list) {
         if (list.head == null) {
-            return; // Если второй список пуст, ничего не делаем
+            return;
         }
+
+        Node listHead = list.head;
         if (head == null) {
-            // Если текущий список пуст, просто копируем второй список
-            head = list.head;
+            head = listHead;
+            tail = list.tail;
+        } else {
+            tail.next = listHead;
+            listHead.previous = tail;
             tail = list.tail;
         }
-        // Находим последний узел первого списка
-        Node lastNode = head;
-        while(lastNode.next != null) {
-            lastNode = lastNode.next;
-        }
-        // Присваиваем последнему узлу первого списка ссылку на первый узел второго списка
-        lastNode.next = list.head;
-        list.head.previous = lastNode;
+        print();
+        size += list.size;
     }
+    public boolean contains(MyLinkedList list) {
+        Node current = head;
+        Node subCurrent = list.head;
+        while (current != null && subCurrent != null) {
+            if (current.data != subCurrent.data) {
+                current = current.next;
+            } else {
+                current = current.next;
+                subCurrent = subCurrent.next;
+            }
+        }
+        return subCurrent == null;
+    }
+    public int searchFirst(MyLinkedList list) {
+        Node current = head;
+        Node secCurrent = list.head;
 
+        while (current != null) {
+            if (current.data == secCurrent.data) {
+                Node tempFirst = current;
+                Node tempSecond = secCurrent;
 
+                while (tempFirst != null && tempSecond != null) {
+                    if (tempFirst.data != tempSecond.data) {
+                        break;
+                    }
+                    tempFirst = tempFirst.next;
+                    tempSecond = tempSecond.next;
+                }
+                if (tempSecond == null) {
+                    return current.data;
+                }
+            }
+            current = current.next;
+        }
+        System.out.println("Список не найден");
+        return -1;
+    }
+    public int searchLast(MyLinkedList list) {
+        Node current = head;
+        Node secCurrent = list.tail;
+
+        while (current != null) {
+            if (current.data == secCurrent.data) {
+                Node tempFirst = current;
+                Node tempSecond = secCurrent;
+
+                while (tempFirst != null && tempSecond != null) {
+                    if (tempFirst.data != tempSecond.data) {
+                        break;
+                    }
+                    tempFirst = tempFirst.next;
+                    tempSecond = tempSecond.next;
+                }
+                if (tempSecond == null && tempFirst == null) {
+                    return current.data;
+                }
+            }
+            current = current.next;
+        }
+        System.out.println("Список не найден");
+        return -1;
+    }
+    public void swap(int index1, int index2) {
+        // Проверяем, что список не пуст и индексы валидны
+        if (head == null || index1 < 0 || index1 >= size || index2 < 0 || index2 >= size) {
+            return;
+        }
+        // Если индексы одинаковые, ничего не делаем
+        if (index1 == index2) {
+            return;
+        }
+        // Находим первый элемент для обмена
+        Node currNode1 = head;
+        for (int i = 0; i < index1; i++) {
+            currNode1 = currNode1.next;
+        }
+        // Находим второй элемент для обмена
+        Node currNode2 = head;
+        for (int i = 0; i < index2; i++) {
+            currNode2 = currNode2.next;
+        }
+        // Обмениваем значения элементов
+        Object temp = currNode1.data;
+        currNode1.data = currNode2.data;
+        currNode2.data = (int) temp;
+        print();
+    }
     public void print() {
-        Node currentNode = head;
-
-        if (head != null) {
-            System.out.println(head.data);
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data);
+            current = current.next;
         }
-
-        while(currentNode.next != null) {
-            currentNode = currentNode.next;
-            System.out.println(currentNode.data);
-        }
+        System.out.println();
     }
-
 }
